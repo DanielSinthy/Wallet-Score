@@ -4,9 +4,11 @@ const path = require('path');
 const {calculateScore} = require('../controller/score');
 
 
-router.get('/score', (req, res) => {
-	const scoreJson = calculateScore();
-	res.json(scoreJson)
+router.get('/score', async (req, res) => {
+
+	const address = req.query.address;
+	const scoreJson = await calculateScore(address);
+	res.json(scoreJson);
 });
 
 router.get('/ping', (req, res) => {
