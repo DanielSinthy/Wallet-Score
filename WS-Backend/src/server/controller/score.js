@@ -9,6 +9,7 @@ async function calculateScore(address) {
     let stakeAddress = null;
     let poolId = null;
     let poolName = null;
+    let policyCount = null;
     try {
         const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/addresses/' + address, {headers: {project_id: "mainnetOWJvpavAGJRhQbSNYHA29SEV5OdPUXqp"}});
         stakeAddress = response.data.stake_address;
@@ -31,18 +32,26 @@ async function calculateScore(address) {
     }
 
     try {
-        const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0//pools/' + poolId + '/metadata', {headers: {project_id: "mainnetOWJvpavAGJRhQbSNYHA29SEV5OdPUXqp"}});
+        const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/pools/' + poolId + '/metadata', {headers: {project_id: "mainnetOWJvpavAGJRhQbSNYHA29SEV5OdPUXqp"}});
         poolName = response.data.name;
         //return response.data;
     } catch (e) {
         console.log(e);
     }
 
+    try {
+        const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/accounts/' + stakeAddress + '/addresses/assets', {headers: {project_id: "mainnetOWJvpavAGJRhQbSNYHA29SEV5OdPUXqp"}});
+        policyCount = response.data.length;
+    } catch (e) {
+        console.log(e);
+    }
+
+
     let output = {
         age: 100,
         transactions: 500,
         balance: 55555,
-        policyIds: 20,
+        policyCount: 0,
         stakepool: "Test"
     };
 
@@ -54,6 +63,9 @@ async function calculateScore(address) {
     }
     if (poolName) {
         output.stakepool = poolName;
+    }
+    if (policyCount) {
+        output.policyCount = policyCount;
     }
 
     return output;

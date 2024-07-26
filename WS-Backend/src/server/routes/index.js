@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const {calculateScore} = require('../controller/score');
+var cors = require('cors');
+var app = express();
 
+app.use(cors());
 
 router.get('/score', async (req, res) => {
 
