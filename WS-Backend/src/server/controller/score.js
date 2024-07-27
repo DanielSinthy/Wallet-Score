@@ -23,15 +23,7 @@ async function calculateScore(address) {
         return {status: {success: false, message: "No stake address!"}}
     }
 
-    try {
-        const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/accounts/' + stakeAddress, {headers: {project_id: projectId}});
-        delegationAgeEpoch = response.data.active_epoch;
-        balance = response.data.controlled_amount;
-        poolId = response.data.pool_id;
-        //return response.data;
-    } catch (e) {
-        console.log(e);
-    }
+    [delegationAgeEpoch, balance, poolId] = await fetchData(stakeAddress);
 
     try {
         const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/pools/' + poolId + '/metadata', {headers: {project_id: projectId}});
@@ -60,7 +52,6 @@ async function calculateScore(address) {
         });
 
         ageObj = calculateAge(firstBlockTime);
-        //return response.data
     } catch (e) {
         console.log(e);
     }
@@ -114,13 +105,28 @@ async function calculateScore(address) {
 }
 
 /**
- * Fetch the stake address from adress
+ * Fetch the stake address by an adress from blockfrost
  */
 async function fetchStakeAddress(address) {
 
     try {
         const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/addresses/' + address, {headers: {project_id: projectId}});
         return response.data.stake_address;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+/**
+ * Fetch basic data like age, poolId and balance from blockfrost
+ */
+async function fetchData(stakeAddress) {
+    try {
+        const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/accounts/' + stakeAddress, {headers: {project_id: projectId}});
+        delegationAgeEpoch = response.data.active_epoch;
+        balance = response.data.controlled_amount;
+        poolId = response.data.pool_id;
+        return [delegationAgeEpoch, balance, poolId];
     } catch (e) {
         console.log(e);
     }
