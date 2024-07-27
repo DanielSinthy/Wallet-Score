@@ -9,6 +9,8 @@ async function calculateScore(address) {
     let poolId = null;
     let poolName = null;
     let policyCount = null;
+    let ageObj = null;
+    
     try {
         const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/addresses/' + address, {headers: {project_id: "mainnetOWJvpavAGJRhQbSNYHA29SEV5OdPUXqp"}});
         stakeAddress = response.data.stake_address;
@@ -45,8 +47,6 @@ async function calculateScore(address) {
         console.log(e);
     }
 
-<<<<<<< HEAD
-=======
     try {
         const response = await axios.get('https://api.koios.rest/api/v1/account_txs?_stake_address=' + stakeAddress);
         transactionCount = response.data.length;
@@ -58,31 +58,30 @@ async function calculateScore(address) {
             }
         });
         
-        console.log(firstBlockTime);
-        var d = timestamp.toDate(firstBlockTime);
-  
-        console.log(firstBlockTime + "\t" + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear());
-        console.log(calculateAge(firstBlockTime));
+        ageObj = calculateAge(firstBlockTime); 
         //return response.data
     } catch (e) {
         console.log(e);
     }
-
->>>>>>> cc7a169 (detailberechnung der age)
+    
 
     let output = {
         age: 100,
-        transactions: 500,
+        ageString: ageObj['string'],
+        transactionCount: 500,
         balance: 55555,
+        balanceAda: 5,
         policyCount: 0,
-        stakepool: "Test"
+        stakepool: "Test",
+
     };
 
     if (age) {
         output.age = age;
     }
     if (balance) {
-        output.balance = balance;
+        output.balance = parseInt(balance);
+        output.balanceAda = parseInt(balance)/1000000;
     }
     if (poolName) {
         output.stakepool = poolName;
@@ -90,6 +89,13 @@ async function calculateScore(address) {
     if (policyCount) {
         output.policyCount = policyCount;
     }
+    if (transactionCount) {
+        output.transactionCount = transactionCount;
+    }
+    if (transactionCount) {
+        output.transactionCount = transactionCount;
+    }
+
 
     return output;
 }
