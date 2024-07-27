@@ -1,7 +1,9 @@
 export interface WalletDetailsProps {
-    age: string;
+    age: number; 
     transactions: number;
     balance: number;
-    reputation: string;
+    policyIds: number;
+    stakepool: string;
+    
   }
   
