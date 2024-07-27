@@ -1,15 +1,27 @@
 import axios from 'axios';
 import { WalletDetailsProps } from '../types/wallet';
 
-const API_URL = 'http://localhost:4444/score?address=addr1q965hhtm37m0836c4va2wpaysal370v37lthxt9ylsm4ndx4p8zlw304qch8g95kdrtyfqeachje7rcxt4zsd3g8hless3jl40';
+class ApiError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "ApiError";
+    }
+}
 
-export const fetchWalletDetails = async (): Promise<WalletDetailsProps> => {
-  try {
-    const response = await axios.get(API_URL);
-    console.log(response)
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching wallet details:', error);
-    throw error;
-  }
+const API_URL = 'http://localhost:4444/score?address=';
+
+export const fetchWalletDetails = async (addressInput: string): Promise<WalletDetailsProps> => {
+    try {
+        const response = await axios.get(`${API_URL}${addressInput}`);
+        if (response.data.status === "error" || response.data.status.success === false) {
+            throw new ApiError(response.data.status.message || 'Unknown error occurred');
+        }
+        return response.data;
+    } catch (error) {
+        if (!(error instanceof Error)) {
+            throw new ApiError('An unknown error occurred');
+        }
+
+        throw new ApiError(error.message);
+    }
 };
