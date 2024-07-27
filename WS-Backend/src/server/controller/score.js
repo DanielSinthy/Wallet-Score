@@ -25,20 +25,9 @@ async function calculateScore(address) {
 
     [delegationAgeEpoch, balance, poolId] = await fetchData(stakeAddress);
 
-    try {
-        const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/pools/' + poolId + '/metadata', {headers: {project_id: projectId}});
-        poolName = response.data.name;
-        //return response.data;
-    } catch (e) {
-        console.log(e);
-    }
+    poolName = await fetchPoolName(poolId);
 
-    try {
-        const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/accounts/' + stakeAddress + '/addresses/assets', {headers: {project_id: projectId}});
-        policyCount = response.data.length;
-    } catch (e) {
-        console.log(e);
-    }
+    policyCount = await fetchPoliceCount(stakeAddress);
 
     try {
         const response = await axios.get('https://api.koios.rest/api/v1/account_txs?_stake_address=' + stakeAddress);
@@ -105,13 +94,37 @@ async function calculateScore(address) {
 }
 
 /**
- * Fetch the stake address by an adress from blockfrost
+ * Fetch the stake address by an adress from blockfrost api
  */
 async function fetchStakeAddress(address) {
 
     try {
         const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/addresses/' + address, {headers: {project_id: projectId}});
         return response.data.stake_address;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+/**
+ * Fetch the pool name by the poolid from blockfrost api
+ */
+async function fetchPoolName(poolId) {
+    try {
+        const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/pools/' + poolId + '/metadata', {headers: {project_id: projectId}});
+        return response.data.name;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+/**
+ * Fetch the policyIds ba stakeID from blockfrost api
+ */
+async function fetchPoliceCount(stakeAddress) {
+    try {
+        const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/accounts/' + stakeAddress + '/addresses/assets', {headers: {project_id: projectId}});
+        return response.data.length;
     } catch (e) {
         console.log(e);
     }
