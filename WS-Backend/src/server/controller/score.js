@@ -13,11 +13,11 @@ async function calculateScore(address) {
     let balance = null;
     let stakeAddress = null;
     let poolId = null;
-    let poolName = null;
+    let poolName = "";
     let policyCount = null;
     let ageObj = null;
 
-    stakeAddress = await fetchStakeAddress(address);
+    stakeAddress = await fetchStakeAddress(address); 
 
     if (!stakeAddress) {
         return {status: {success: false, message: "No stake address!"}}
@@ -25,7 +25,9 @@ async function calculateScore(address) {
 
     [delegationAgeEpoch, balance, poolId] = await fetchData(stakeAddress);
 
-    poolName = await fetchPoolName(poolId);
+    if (poolId) {
+        poolName = await fetchPoolName(poolId);
+    }
 
     policyCount = await fetchPoliceCount(stakeAddress);
 
@@ -68,6 +70,7 @@ async function calculateScore(address) {
 
     };
 
+    // set values to final object
     if (delegationAgeEpoch) {
         output.delegationAge = (currentEpoch - delegationAgeEpoch) * 5;
     }
