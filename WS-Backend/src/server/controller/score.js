@@ -1,5 +1,4 @@
-
-
+const timestamp = require('unix-timestamp');
 const axios = require('axios');
 
 async function calculateScore(address) {
@@ -46,6 +45,30 @@ async function calculateScore(address) {
         console.log(e);
     }
 
+<<<<<<< HEAD
+=======
+    try {
+        const response = await axios.get('https://api.koios.rest/api/v1/account_txs?_stake_address=' + stakeAddress);
+        transactionCount = response.data.length;
+        
+        var firstBlockTime = null;
+        response.data.forEach(function(elem) {
+            if((firstBlockTime === null) || (elem.block_time < firstBlockTime)) {
+                firstBlockTime = elem.block_time;
+            }
+        });
+        
+        console.log(firstBlockTime);
+        var d = timestamp.toDate(firstBlockTime);
+  
+        console.log(firstBlockTime + "\t" + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear());
+        console.log(calculateAge(firstBlockTime));
+        //return response.data
+    } catch (e) {
+        console.log(e);
+    }
+
+>>>>>>> cc7a169 (detailberechnung der age)
 
     let output = {
         age: 100,
@@ -71,7 +94,27 @@ async function calculateScore(address) {
     return output;
 }
 
+function calculateAge(firstBlockTime) { 
+   const ageInSeconds = timestamp.now()-firstBlockTime;
+
+   const age = [];
+   // for this POC I don't care about leap years
+   age['secondsTotal'] = parseInt(ageInSeconds);
+   age['daysTotal'] = parseInt(ageInSeconds/86400);
+   age['hoursTotal'] = parseInt(ageInSeconds/3600);
+   age['epochs'] = parseInt(age['daysTotal']/5);
+   age["year"] = parseInt(age['secondsTotal']/(365*86400));
+   age["day"] = parseInt(age['daysTotal']-(365*age['year']));
+   age["hour"] = parseInt(age['hoursTotal']-(age['year']*365*24)-(age['day']*24));
+   age["string"] = age["year"] + "y " + age["day"] + "d " + age["hour"] + "h"; 
+ 
+   console.log(age);
+
+   return(age);
+ }
+
 
 module.exports = {
     calculateScore
 };
+
