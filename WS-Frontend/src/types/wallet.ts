@@ -1,9 +1,20 @@
 export interface WalletDetailsProps {
-    age: number; 
-    transactions: number;
     balance: number;
-    policyIds: number;
+    balanceAda: number;
+    delegationAge: number;
+    index: {
+        balanceIndex: number;
+        openWalletScore: number;
+        policyCountIndex: number;
+        reportedIndex: number;
+        stakeDateIndex: number;
+        totalTxIndex: number;
+        walletAgeIndex: number;
+    };
+
+    policyCount: number;
     stakepool: string;
-    
-  }
-  
+    transactionCount: number;
+    walletAge: number;
+    walletAgeString: string;
+}
