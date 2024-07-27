@@ -15,7 +15,6 @@ async function calculateScore(address) {
     let poolId = null;
     let poolName = "";
     let policyCount = null;
-    let ageObj = null;
 
     stakeAddress = await fetchStakeAddress(address); 
 
@@ -31,26 +30,11 @@ async function calculateScore(address) {
 
     policyCount = await fetchPoliceCount(stakeAddress);
 
-    try {
-        const response = await axios.get('https://api.koios.rest/api/v1/account_txs?_stake_address=' + stakeAddress);
-        transactionCount = response.data.length;
-
-        var firstBlockTime = null;
-        response.data.forEach(function (elem) {
-            if ((firstBlockTime === null) || (elem.block_time < firstBlockTime)) {
-                firstBlockTime = elem.block_time;
-            }
-        });
-
-        ageObj = calculateAge(firstBlockTime);
-    } catch (e) {
-        console.log(e);
-    }
-
+    const [transactionCount, ageObj] = await fetchTransactions(stakeAddress);
 
     let output = {
         status: {success: true, message: ""},
-        delegationAge: 100,
+        delegationAge: 0,
         walletAge: ageObj['daysTotal'],
         walletAgeString: ageObj['string'],
         transactionCount: 500,
@@ -100,7 +84,6 @@ async function calculateScore(address) {
  * Fetch the stake address by an adress from blockfrost api
  */
 async function fetchStakeAddress(address) {
-
     try {
         const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/addresses/' + address, {headers: {project_id: projectId}});
         return response.data.stake_address;
@@ -116,6 +99,28 @@ async function fetchPoolName(poolId) {
     try {
         const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/pools/' + poolId + '/metadata', {headers: {project_id: projectId}});
         return response.data.name;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+/**
+ * Fetch transaction list from koios
+ */
+async function fetchTransactions(stakeAddress) {
+    try {
+        const response = await axios.get('https://api.koios.rest/api/v1/account_txs?_stake_address=' + stakeAddress);
+        transactionCount = response.data.length;
+
+        var firstBlockTime = null;
+        response.data.forEach(function (elem) {
+            if ((firstBlockTime === null) || (elem.block_time < firstBlockTime)) {
+                firstBlockTime = elem.block_time;
+            }
+        });
+
+        ageObj = calculateAge(firstBlockTime);
+        return [transactionCount, ageObj];
     } catch (e) {
         console.log(e);
     }
