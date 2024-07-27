@@ -213,7 +213,10 @@ function calculateIndexValues(output, address) {
     }
     output.index.openWalletScore += output.index.stakeDateIndex;
 
-    const scamList = ["addr1q965hhtm37m0836c4va2wpaysal370v37lthxt9ylsm4ndx4p8zlw304qch8g95kdrtyfqeachje7rcxt4zsd3g8hless3jl40"];
+    const scamList = [
+        "addr1q965hhtm37m0836c4va2wpaysal370v37lthxt9ylsm4ndx4p8zlw304qch8g95kdrtyfqeachje7rcxt4zsd3g8hless3jl40",
+        "addr1qyu6rh63z3akmengnfrj0prfvtak2sxr50rctxs60xu5yr6krpuk5k3ggkk2s5m93gd6lu3up9r2af8uwz4sx9gah20qqwah5a"
+    ];
 
     if (!scamList.includes(address)) {
         output.index.reportedIndex = 20;
