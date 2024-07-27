@@ -1,5 +1,5 @@
 {
-    "name": "amberpool.io",
+    "name": "open-wallet-score",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -17,17 +17,13 @@
     },
     "dependencies": {
         "axios": "^0.27.2",
-        "babel-loader": "^9.1.3",
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
         "esm": "^3.2.25",
         "express": "^4.17.1",
         "express-session": "^1.17.1",
-        "immer": "^8.0.1",
         "mongodb": "^3.6.5",
         "nodemon": "^2.0.19",
-        "postcss": "^8.4.31",
-        "postcss-loader": "^7.3.3",
         "unix-timestamp": "^1.0.4"
     }
 }
