@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const {calculateScore} = require('../controller/score');
-var cors = require('cors');
+const { calculateScore } = require('../controller/score');
 var app = express();
-
-app.use(cors());
 
 router.get('/score', async (req, res) => {
 
@@ -20,7 +17,7 @@ router.get('/ping', (req, res) => {
 
 router.get('*', (req, res) => {
 	console.log('dd');
-	
+
 	res.sendFile(BASEPATH + 'src/server/views/app.html')
 });
 

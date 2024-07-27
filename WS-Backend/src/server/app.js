@@ -4,12 +4,21 @@ const webRouter = require('./routes/index');
 const dotenv = require('dotenv');
 const session = require('express-session');
 const errorHandler = require('./middleware/errorHandler');
+var cors = require('cors');
 dotenv.config({ path: path.join(__dirname, '../config/.env') });
 
 global.BASEPATH = path.join(__dirname, '../../');
 global.NODE_ENV = process.env.NODE_ENV;
 
 const app = express();
+
+const corsOptions = {
+	origin: '*', 
+	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+	allowedHeaders: 'Content-Type, Authorization'
+};
+
+app.use(cors(corsOptions));
 
 app.use(
 	session({
