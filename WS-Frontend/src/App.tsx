@@ -6,7 +6,14 @@ function App() {
   return (
     <div className="App">
       <CssBaseline />
-      <Container>
+      <Container 
+        sx={{
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
         <Dashboard />
       </Container>
     </div>
