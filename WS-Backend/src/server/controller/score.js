@@ -48,7 +48,7 @@ async function calculateScore(address) {
         balance: 55555,
         balanceAda: 5,
         policyCount: 0,
-        stakepool: "Test",
+        stakepool: "",
         index: {
             walletAgeIndex: 0,
             totalTxIndex: 0,
@@ -58,7 +58,6 @@ async function calculateScore(address) {
             reportedIndex: 0,
             openWalletScore: 0
         }
-
     };
 
     // set values to final object
