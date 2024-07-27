@@ -16,7 +16,7 @@ async function calculateScore(address) {
     let poolName = "";
     let policyCount = null;
 
-    stakeAddress = await fetchStakeAddress(address); 
+    stakeAddress = await fetchStakeAddress(address);
 
     if (!stakeAddress) {
         return {status: {success: false, message: "No stake address!"}}
@@ -30,7 +30,14 @@ async function calculateScore(address) {
 
     policyCount = await fetchPoliceCount(stakeAddress);
 
-    const [transactionCount, ageObj] = await fetchTransactions(stakeAddress);
+    let transactionCount = 0;
+    let ageObj = {}
+    if (bigAccounts[address]) {
+        transactionCount = bigAccounts[address].transactionCount;
+        ageObj = bigAccounts[address].ageObj;
+    } else {
+        [transactionCount, ageObj] = await fetchTransactions(stakeAddress);
+    }
 
     let output = {
         status: {success: true, message: ""},
@@ -234,8 +241,11 @@ function calculateAge(firstBlockTime) {
     return (age);
 }
 
+const bigAccounts = {
+    "addr1qxdfqunt6cjd03485aqpma6e065kvf2vuxznfu6ex0kjnclrzr27g03klu862usxqsru794d03gzkk8n86ta34n85z0s704vzm":
+        {transactionCount: 5546, ageObj: {'daysTotal': 541, 'string': "3y"}}
+};
 
 module.exports = {
     calculateScore
 };
-
