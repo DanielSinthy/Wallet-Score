@@ -10,7 +10,7 @@ async function calculateScore(address) {
     let poolName = null;
     let policyCount = null;
     let ageObj = null;
-    
+
     try {
         const response = await axios.get('https://cardano-mainnet.blockfrost.io/api/v0/addresses/' + address, {headers: {project_id: "mainnetOWJvpavAGJRhQbSNYHA29SEV5OdPUXqp"}});
         stakeAddress = response.data.stake_address;
@@ -73,6 +73,15 @@ async function calculateScore(address) {
         balanceAda: 5,
         policyCount: 0,
         stakepool: "Test",
+        index: {
+            walletAgeIndex: 15,
+            totalTxIndex: 20,
+            balanceIndex: 5,
+            policyCountIndex: 20,
+            stakeDateIndex: 20,
+            reportedIndex: 20,
+            openWalletScore: 100
+        }
 
     };
 
