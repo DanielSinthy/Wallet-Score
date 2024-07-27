@@ -243,7 +243,9 @@ function calculateAge(firstBlockTime) {
 
 const bigAccounts = {
     "addr1qxdfqunt6cjd03485aqpma6e065kvf2vuxznfu6ex0kjnclrzr27g03klu862usxqsru794d03gzkk8n86ta34n85z0s704vzm":
-        {transactionCount: 5546, ageObj: {'daysTotal': 541, 'string': "3y"}}
+        {transactionCount: 5546, ageObj: {'daysTotal': 780, 'string': "2y 50d 2h"}},
+    "addr1qyu6rh63z3akmengnfrj0prfvtak2sxr50rctxs60xu5yr6krpuk5k3ggkk2s5m93gd6lu3up9r2af8uwz4sx9gah20qqwah5a":
+        {transactionCount: 22017, ageObj: {'daysTotal': 1184, 'string': "3y 89d 2h"}}
 };
 
 module.exports = {
